@@ -7,7 +7,7 @@
     --primary-light: #7a9690;
     --primary-dark: #455c56;
     --accent-color: #ffffff;
-    --text-color: #ffffff;
+    --text-color: #000000;
     --bg-color: #f5f5f5;
     --card-bg: #ffffff;
     --card-shadow: 0 2px 8px rgba(93, 121, 114, 0.2);
@@ -77,12 +77,13 @@
     }
 }
 
+/* Переопределяем цвета Telegram */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--tg-theme-bg-color, var(--bg-color));
-    color: var(--tg-theme-text-color, #222);
+    background-color: var(--bg-color) !important;
+    color: var(--text-color) !important;
     transition: background-color 0.3s ease;
 }
 
@@ -116,8 +117,8 @@ header {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--tg-theme-button-color, var(--primary-color));
-    color: var(--tg-theme-button-text-color, var(--text-color));
+    background-color: var(--primary-color) !important;
+    color: var(--accent-color) !important;
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -145,8 +146,8 @@ header {
     padding: 14px;
     border: none;
     border-radius: 12px;
-    background-color: var(--tg-theme-secondary-bg-color, #eee);
-    color: var(--tg-theme-text-color, #222);
+    background-color: #e0e0e0;
+    color: var(--text-color);
     font-size: 16px;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
     box-sizing: border-box; /* Важно! Это предотвратит выход за границы */
@@ -163,8 +164,8 @@ header {
 
 .category {
     flex: 1; /* Кнопки занимают всё доступное пространство */
-    background-color: var(--tg-theme-secondary-bg-color, #eee);
-    color: var(--tg-theme-text-color, #222);
+    background-color: #e0e0e0;
+    color: var(--text-color);
     border: none;
     padding: 10px 5px; /* Уменьшенные отступы внутри кнопки */
     margin: 0 3px; /* Небольшой отступ между кнопками */
@@ -184,8 +185,8 @@ header {
 }
 
 .category.active {
-    background-color: var(--tg-theme-button-color, var(--primary-color));
-    color: var(--tg-theme-button-text-color, var(--text-color));
+    background-color: var(--primary-color) !important;
+    color: var(--accent-color) !important;
 }
 
 /* Сетка товаров - адаптивная */
@@ -242,7 +243,7 @@ header {
 .product-price {
     font-size: 18px; /* Увеличенный шрифт */
     font-weight: 700;
-    color: var(--tg-theme-hint-color, var(--primary-color));
+    color: var(--primary-color);
     margin: 0 0 10px 0;
 }
 
@@ -254,7 +255,7 @@ header {
 
 .stock-info {
     font-size: 14px; /* Увеличенный шрифт */
-    color: var(--tg-theme-hint-color, #777);
+    color: #555;
 }
 
 /* Более заметная кнопка избранного */
@@ -295,7 +296,7 @@ header {
     bottom: 0;
     left: 0;
     right: 0;
-    background-color: var(--tg-theme-bg-color, var(--bg-color));
+    background-color: var(--bg-color);
     border-radius: 20px 20px 0 0;
     padding: 25px; /* Больше отступов */
     max-height: 80%;
@@ -318,6 +319,7 @@ header {
 .modal-header h2 {
     font-size: 22px; /* Увеличенный шрифт */
     margin: 0;
+    color: var(--text-color);
 }
 
 .close-modal {
@@ -345,7 +347,7 @@ header {
 .favorites-list-empty {
     text-align: center;
     padding: 30px; /* Больше отступов */
-    color: var(--tg-theme-hint-color, #777);
+    color: #777;
     font-size: 16px;
 }
 
