@@ -1,0 +1,386 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #5d7972;
+    --primary-light: #7a9690;
+    --primary-dark: #455c56;
+    --accent-color: #ffffff;
+    --text-color: #ffffff;
+    --bg-color: #f5f5f5;
+    --card-bg: #ffffff;
+    --card-shadow: 0 2px 8px rgba(93, 121, 114, 0.2);
+}
+
+@keyframes favoriteAnimation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Анимация с аниме-девочкой при добавлении в избранное */
+@keyframes rotateAndScale {
+    0% {
+        transform: rotate(0deg) scale(0);
+        opacity: 0;
+    }
+    10% {
+        transform: rotate(36deg) scale(0.3);
+        opacity: 1;
+    }
+    20% {
+        transform: rotate(72deg) scale(0.5);
+    }
+    30% {
+        transform: rotate(108deg) scale(0.7);
+    }
+    40% {
+        transform: rotate(144deg) scale(0.9);
+    }
+    50% {
+        transform: rotate(180deg) scale(1);
+    }
+    60% {
+        transform: rotate(216deg) scale(0.9);
+    }
+    70% {
+        transform: rotate(252deg) scale(0.7);
+    }
+    80% {
+        transform: rotate(288deg) scale(0.5);
+    }
+    90% {
+        transform: rotate(324deg) scale(0.3);
+        opacity: 1;
+    }
+    100% {
+        transform: rotate(360deg) scale(0);
+        opacity: 0;
+    }
+}
+
+@keyframes shineEffect {
+    0% {
+        filter: drop-shadow(0 0 0 rgba(255, 100, 255, 0));
+    }
+    50% {
+        filter: drop-shadow(0 0 15px rgba(255, 100, 255, 0.8));
+    }
+    100% {
+        filter: drop-shadow(0 0 0 rgba(255, 100, 255, 0));
+    }
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: var(--tg-theme-bg-color, var(--bg-color));
+    color: var(--tg-theme-text-color, #222);
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    height: 40px;
+}
+
+/* Увеличенная кнопка избранного для мобильных */
+.favorites-button {
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--tg-theme-button-color, var(--primary-color));
+    color: var(--tg-theme-button-text-color, var(--text-color));
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    /* Тень для лучшей видимости */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.favorites-button:active {
+    transform: scale(0.95);
+}
+
+.favorites-icon {
+    font-size: 28px; /* Увеличенный размер */
+}
+
+/* Исправленное поле поиска */
+.search-box {
+    margin-bottom: 16px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#search-input {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background-color: var(--tg-theme-secondary-bg-color, #eee);
+    color: var(--tg-theme-text-color, #222);
+    font-size: 16px;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    box-sizing: border-box; /* Важно! Это предотвратит выход за границы */
+}
+
+/* Категории - увеличены для мобильного */
+.categories {
+    display: flex;
+    overflow-x: auto;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding: 10px 0;
+    scrollbar-width: none;
+}
+
+.categories::-webkit-scrollbar {
+    display: none;
+}
+
+.category {
+    background-color: var(--tg-theme-secondary-bg-color, #eee);
+    color: var(--tg-theme-text-color, #222);
+    border: none;
+    padding: 12px 22px; /* Увеличенный размер */
+    border-radius: 30px; /* Более скругленные */
+    font-size: 16px; /* Увеличенный шрифт */
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    /* Тень для лучшей видимости */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.category:active {
+    transform: translateY(1px);
+}
+
+.category.active {
+    background-color: var(--tg-theme-button-color, var(--primary-color));
+    color: var(--tg-theme-button-text-color, var(--text-color));
+}
+
+/* Сетка товаров - адаптивная */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки для мобильных */
+    gap: 16px;
+}
+
+/* На больших экранах увеличиваем количество колонок */
+@media (min-width: 600px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 900px) {
+    .products-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.product-card {
+    background-color: var(--card-bg);
+    border-radius: 15px; /* Более скругленные */
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 0.5s ease;
+}
+
+.product-card:active {
+    transform: scale(0.98);
+}
+
+.product-image {
+    width: 100%;
+    height: 160px; /* Увеличенный размер */
+    object-fit: cover;
+}
+
+.product-info {
+    padding: 15px; /* Больше отступов */
+}
+
+.product-title {
+    font-size: 16px; /* Увеличенный шрифт */
+    font-weight: 500;
+    margin: 0 0 6px 0;
+    color: var(--tg-theme-text-color, #222);
+}
+
+.product-price {
+    font-size: 18px; /* Увеличенный шрифт */
+    font-weight: 700;
+    color: var(--tg-theme-hint-color, var(--primary-color));
+    margin: 0 0 10px 0;
+}
+
+.product-action {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stock-info {
+    font-size: 14px; /* Увеличенный шрифт */
+    color: var(--tg-theme-hint-color, #777);
+}
+
+/* Более заметная кнопка избранного */
+.favorite-button {
+    background: none;
+    border: none;
+    font-size: 28px; /* Увеличенный размер */
+    color: #ccc;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.favorite-button.active {
+    color: #ff5c5c;
+    animation: favoriteAnimation 0.4s ease;
+}
+
+/* Стили модального окна - улучшены для мобильных */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--tg-theme-bg-color, var(--bg-color));
+    border-radius: 20px 20px 0 0;
+    padding: 25px; /* Больше отступов */
+    max-height: 80%;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+}
+
+.modal.active .modal-content {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.modal-header h2 {
+    font-size: 22px; /* Увеличенный шрифт */
+    margin: 0;
+}
+
+.close-modal {
+    font-size: 32px; /* Увеличенный значок закрытия */
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.favorites-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки для мобильных */
+    gap: 16px;
+}
+
+@media (min-width: 600px) {
+    .favorites-list {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.favorites-list-empty {
+    text-align: center;
+    padding: 30px; /* Больше отступов */
+    color: var(--tg-theme-hint-color, #777);
+    font-size: 16px;
+}
+
+/* Контейнер для анимации аниме-девочки */
+.favorite-animation-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.favorite-animation-container.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.favorite-animation-image {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    transform: scale(0);
+    animation-duration: 1.5s;
+    animation-timing-function: ease-in-out;
+    filter: drop-shadow(0 0 8px rgba(255, 100, 255, 0.5));
+}
+
+.favorite-animation-container.active .favorite-animation-image {
+    animation-name: rotateAndScale, shineEffect;
+}

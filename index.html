@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Par Dar Shop</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="images/logo.svg" alt="Par Dar Shop" class="logo-image">
+            </div>
+            <div class="favorites-button" id="favorites-button">
+                <span class="favorites-icon">♥</span>
+            </div>
+        </header>
+        
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="Поиск...">
+        </div>
+        
+        <div class="categories">
+            <button class="category active" data-category="all">Все</button>
+            <button class="category" data-category="pods">Поды</button>
+            <button class="category" data-category="disposable">Одноразки</button>
+            <button class="category" data-category="liquid">Жидкости</button>
+        </div>
+        
+        <div id="products" class="products-grid"></div>
+    </div>
+    
+    <div id="favorites-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Избранное</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div id="favorites-list" class="favorites-list"></div>
+        </div>
+    </div>
+    
+    <div id="favorite-animation" class="favorite-animation-container">
+        <img src="images/anime-girl.png" alt="Favorite" class="favorite-animation-image">
+    </div>
+    
+    <script src="app.js"></script>
+</body>
+</html>
