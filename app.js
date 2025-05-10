@@ -2,15 +2,18 @@
 const tg = window.Telegram.WebApp;
 tg.expand();
 
+// Установка фирменных цветов
+tg.setHeaderColor('#5d7972');
+tg.setBackgroundColor('#f5f5f5');
+
 // Загрузка товаров из JSON-файла
 let products = [];
 let favorites = [];
 
 // Загрузка избранных товаров
 function loadFavorites() {
-    // Проверяем, доступен ли CloudStorage
-    if (tg.CloudStorage && false) { // временно отключаем CloudStorage для отладки
-        return new Promise((resolve) => {
+    return new Promise((resolve) => {
+        if (tg.CloudStorage) {
             tg.CloudStorage.getItem('favorites', (error, value) => {
                 if (error || !value) {
                     resolve([]);
@@ -18,24 +21,14 @@ function loadFavorites() {
                     resolve(JSON.parse(value));
                 }
             });
-        });
-    } else {
-        // Альтернативное решение для браузера
-        const userData = tg.initDataUnsafe?.user;
-        const userId = userData?.id || "anonymous";
-        
-        const savedFavorites = localStorage.getItem(`favorites_${userId}`);
-        return savedFavorites ? JSON.parse(savedFavorites) : [];
-    }
+        } else {
+            resolve([]);
+        }
+    });
 }
 
 // Сохранение избранных товаров
 function saveFavorites() {
-    const userData = tg.initDataUnsafe?.user;
-    const userId = userData?.id || "anonymous";
-    
-    localStorage.setItem(`favorites_${userId}`, JSON.stringify(favorites));
-}function saveFavorites() {
     if (tg.CloudStorage) {
         tg.CloudStorage.setItem('favorites', JSON.stringify(favorites));
     }
@@ -46,25 +39,46 @@ async function loadProducts() {
     try {
         const response = await fetch('products.json');
         products = await response.json();
-        
-        // Получаем избранные товары
-        if (typeof loadFavorites().then === 'function') {
-            // Если функция возвращает Promise
-            favorites = await loadFavorites();
-        } else {
-            // Если функция возвращает значение напрямую
-            favorites = loadFavorites();
-        }
-        
+        favorites = await loadFavorites();
         renderProducts(products);
     } catch (error) {
         console.error('Ошибка загрузки товаров:', error);
         
         // Загрузка демо-товаров, если файл недоступен
         products = [
-            // ... ваши демо-товары ...
+            {
+                id: 1,
+                title: "Одноразка Elf Bar 1500",
+                price: 990,
+                image: "images/placeholder.jpg",
+                category: "disposable",
+                stock: 15
+            },
+            {
+                id: 2,
+                title: "Под-система Smok Novo 4",
+                price: 2490,
+                image: "images/placeholder.jpg",
+                category: "pods",
+                stock: 8
+            },
+            {
+                id: 3,
+                title: "Жидкость Husky Premium 30мл",
+                price: 650,
+                image: "images/placeholder.jpg",
+                category: "liquid",
+                stock: 20
+            },
+            {
+                id: 4,
+                title: "Одноразка HQD Cuvie Plus",
+                price: 850,
+                image: "images/placeholder.jpg",
+                category: "disposable",
+                stock: 12
+            }
         ];
-        favorites = Array.isArray(favorites) ? favorites : [];
         renderProducts(products);
     }
 }
