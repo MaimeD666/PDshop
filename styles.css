@@ -152,33 +152,31 @@ header {
     box-sizing: border-box; /* Важно! Это предотвратит выход за границы */
 }
 
-/* Категории - увеличены для мобильного */
+/* Исправленные категории */
 .categories {
     display: flex;
-    overflow-x: auto;
-    gap: 10px;
+    justify-content: space-between; /* Равномерное распределение */
     margin-bottom: 20px;
     padding: 10px 0;
-    scrollbar-width: none;
-}
-
-.categories::-webkit-scrollbar {
-    display: none;
+    overflow-x: hidden; /* Убираем прокрутку */
 }
 
 .category {
+    flex: 1; /* Кнопки занимают всё доступное пространство */
     background-color: var(--tg-theme-secondary-bg-color, #eee);
     color: var(--tg-theme-text-color, #222);
     border: none;
-    padding: 12px 22px; /* Увеличенный размер */
-    border-radius: 30px; /* Более скругленные */
-    font-size: 16px; /* Увеличенный шрифт */
+    padding: 10px 5px; /* Уменьшенные отступы внутри кнопки */
+    margin: 0 3px; /* Небольшой отступ между кнопками */
+    border-radius: 30px;
+    font-size: 14px; /* Уменьшенный размер шрифта */
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    /* Тень для лучшей видимости */
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    text-overflow: ellipsis; /* Добавляем многоточие при переполнении */
+    overflow: hidden;
 }
 
 .category:active {
@@ -233,11 +231,12 @@ header {
     padding: 15px; /* Больше отступов */
 }
 
+/* Исправленный стиль названия товара */
 .product-title {
-    font-size: 16px; /* Увеличенный шрифт */
-    font-weight: 500;
+    font-size: 18px; /* Увеличенный размер шрифта */
+    font-weight: 700; /* Более жирный шрифт */
     margin: 0 0 6px 0;
-    color: var(--tg-theme-text-color, #222);
+    color: #000000; /* Более темный цвет для лучшей контрастности */
 }
 
 .product-price {
