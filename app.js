@@ -34,49 +34,40 @@ function saveFavorites() {
     }
 }
 
-// Загрузка товаров
+// Загрузка товаров из Firebase
 async function loadProducts() {
     try {
-        const response = await fetch('products.json');
-        products = await response.json();
+        // Проверяем, что db доступен
+        if (typeof db === 'undefined') {
+            throw new Error('Firebase не инициализирован');
+        }
+
+        const snapshot = await db.collection('products').get();
+        products = [];
+        
+        snapshot.forEach(doc => {
+            products.push({
+                id: parseInt(doc.id),
+                ...doc.data()
+            });
+        });
+        
+        // Загружаем избранное
         favorites = await loadFavorites();
+        
         renderProducts(products);
     } catch (error) {
         console.error('Ошибка загрузки товаров:', error);
         
-        // Загрузка демо-товаров, если файл недоступен
+        // Загрузка демо-товаров, если Firebase недоступен
         products = [
             {
                 id: 1,
-                title: "Одноразка Elf Bar 1500",
-                price: 990,
-                image: "images/placeholder.jpg",
-                category: "disposable",
-                stock: 15
-            },
-            {
-                id: 2,
-                title: "Под-система Smok Novo 4",
-                price: 2490,
-                image: "images/placeholder.jpg",
+                title: "Тестовый товар",
+                price: 1000,
+                image: "images/placeholder.png",
                 category: "pods",
-                stock: 8
-            },
-            {
-                id: 3,
-                title: "Жидкость Husky Premium 30мл",
-                price: 650,
-                image: "images/placeholder.jpg",
-                category: "liquid",
-                stock: 20
-            },
-            {
-                id: 4,
-                title: "Одноразка HQD Cuvie Plus",
-                price: 850,
-                image: "images/placeholder.jpg",
-                category: "disposable",
-                stock: 12
+                stock: 10
             }
         ];
         renderProducts(products);
@@ -96,7 +87,7 @@ function renderProducts(productsToRender) {
         productElement.classList.add('animate__animated', 'animate__fadeIn');
         
         productElement.innerHTML = `
-            <img class="product-image" src="${product.image}" alt="${product.title}" onerror="this.src='images/placeholder.jpg'">
+            <img class="product-image" src="${product.image}" alt="${product.title}" onerror="this.src='images/placeholder.png'">
             <div class="product-info">
                 <h3 class="product-title">${product.title}</h3>
                 <p class="product-price">${product.price} ₽</p>
@@ -209,7 +200,7 @@ function showFavorites() {
             productElement.className = 'product-card';
             
             productElement.innerHTML = `
-                <img class="product-image" src="${product.image}" alt="${product.title}" onerror="this.src='images/placeholder.jpg'">
+                <img class="product-image" src="${product.image}" alt="${product.title}" onerror="this.src='images/placeholder.png'">
                 <div class="product-info">
                     <h3 class="product-title">${product.title}</h3>
                     <p class="product-price">${product.price} ₽</p>
