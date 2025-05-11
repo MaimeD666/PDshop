@@ -1,4 +1,3 @@
-// Конфигурация Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCDjXMxt7ppjd4rgEdQvdkXMYqz2wOLz3Y",
   authDomain: "pdshop-8f846.firebaseapp.com",
@@ -8,8 +7,7 @@ const firebaseConfig = {
   appId: "1:673934870613:web:bfa384823780a5e8a1acdc"
 };
 
-// Инициализация Firebase
 firebase.initializeApp(firebaseConfig);
 
-// Создание ссылок на сервисы
 const db = firebase.firestore();
+const auth = firebase.auth();
