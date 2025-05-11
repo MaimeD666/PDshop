@@ -327,14 +327,17 @@ function showReviewForm() {
 }
 
 async function submitReview() {
-    if (!tg.initDataUnsafe?.user) {
-        showNotification('Необходимо авторизоваться через Telegram', 'error');
+    // Проверяем доступность данных пользователя
+    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+        showNotification('Ошибка авторизации в Telegram', 'error');
+        console.error('Данные пользователя недоступны:', tg.initDataUnsafe);
         return;
     }
     
     const user = tg.initDataUnsafe.user;
     const userId = user.id.toString();
-    const userName = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+    // Защита от undefined в имени пользователя
+    const userName = user.first_name || 'Пользователь';
     const reviewText = document.getElementById('review-text').value.trim();
     
     if (selectedRating === 0) {
@@ -348,6 +351,7 @@ async function submitReview() {
     }
     
     try {
+        // Создаем объект с данными отзыва
         const reviewData = {
             userId: userId,
             userName: userName,
@@ -356,8 +360,11 @@ async function submitReview() {
             date: firebase.firestore.FieldValue.serverTimestamp()
         };
         
+        console.log('Отправляем отзыв:', reviewData);
+        
+        // Проверяем существование документа перед обновлением
         if (userReview) {
-            await db.collection('reviews').doc(userReview.id).update(reviewData);
+            await db.collection('reviews').doc(userId).update(reviewData);
             showNotification('Ваш отзыв обновлен', 'success');
         } else {
             await db.collection('reviews').doc(userId).set(reviewData);
@@ -378,7 +385,7 @@ async function submitReview() {
         
     } catch (error) {
         console.error('Ошибка при отправке отзыва:', error);
-        showNotification('Ошибка при отправке отзыва', 'error');
+        showNotification('Ошибка при отправке отзыва: ' + (error.message || 'Неизвестная ошибка'), 'error');
     }
 }
 
