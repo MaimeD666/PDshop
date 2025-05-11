@@ -10,7 +10,6 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="firebase-config.js"></script>
@@ -37,7 +36,25 @@
             <button class="category" data-category="liquid">Жидкости</button>
         </div>
         
-        <div id="products" class="products-grid"></div>
+        <div class="tabs">
+            <button class="tab active" data-tab="products">Товары</button>
+            <button class="tab" data-tab="reviews">Отзывы</button>
+        </div>
+        
+        <div id="content">
+            <div id="products-content" class="tab-content active">
+                <div id="products" class="products-grid"></div>
+            </div>
+            
+            <div id="reviews-content" class="tab-content">
+                <div class="reviews-header">
+                    <h2>Отзывы о магазине</h2>
+                    <button id="add-review-button" class="add-review-button">Оставить отзыв</button>
+                </div>
+                
+                <div id="reviews-list" class="reviews-list"></div>
+            </div>
+        </div>
     </div>
     
     <div id="favorites-modal" class="modal">
@@ -47,6 +64,33 @@
                 <span class="close-modal">&times;</span>
             </div>
             <div id="favorites-list" class="favorites-list"></div>
+        </div>
+    </div>
+    
+    <div id="review-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Оставить отзыв</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div id="review-form">
+                <div class="rating-selector">
+                    <p>Оценка:</p>
+                    <div class="stars">
+                        <span class="star" data-rating="1">★</span>
+                        <span class="star" data-rating="2">★</span>
+                        <span class="star" data-rating="3">★</span>
+                        <span class="star" data-rating="4">★</span>
+                        <span class="star" data-rating="5">★</span>
+                    </div>
+                </div>
+                <div class="review-text">
+                    <p>Ваш отзыв:</p>
+                    <textarea id="review-text" maxlength="500" placeholder="Поделитесь вашими впечатлениями о магазине..."></textarea>
+                    <div class="text-count"><span id="char-count">0</span>/500</div>
+                </div>
+                <button id="submit-review" class="primary-button">Отправить</button>
+            </div>
         </div>
     </div>
     

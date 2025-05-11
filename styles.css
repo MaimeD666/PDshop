@@ -24,7 +24,6 @@
     to { opacity: 1; }
 }
 
-/* Анимация с аниме-девочкой при добавлении в избранное */
 @keyframes rotateAndScale {
     0% {
         transform: rotate(0deg) scale(0);
@@ -77,7 +76,6 @@
     }
 }
 
-/* Переопределяем цвета Telegram */
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     margin: 0;
@@ -110,7 +108,6 @@ header {
     height: 40px;
 }
 
-/* Увеличенная кнопка избранного для мобильных */
 .favorites-button {
     width: 50px;
     height: 50px;
@@ -122,7 +119,6 @@ header {
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;
-    /* Тень для лучшей видимости */
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
@@ -131,10 +127,9 @@ header {
 }
 
 .favorites-icon {
-    font-size: 28px; /* Увеличенный размер */
+    font-size: 28px;
 }
 
-/* Исправленное поле поиска */
 .search-box {
     margin-bottom: 16px;
     width: 100%;
@@ -150,33 +145,32 @@ header {
     color: var(--text-color);
     font-size: 16px;
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
-    box-sizing: border-box; /* Важно! Это предотвратит выход за границы */
+    box-sizing: border-box;
 }
 
-/* Исправленные категории */
 .categories {
     display: flex;
-    justify-content: space-between; /* Равномерное распределение */
+    justify-content: space-between;
     margin-bottom: 20px;
     padding: 10px 0;
-    overflow-x: hidden; /* Убираем прокрутку */
+    overflow-x: hidden;
 }
 
 .category {
-    flex: 1; /* Кнопки занимают всё доступное пространство */
+    flex: 1;
     background-color: #e0e0e0;
     color: var(--text-color);
     border: none;
-    padding: 10px 5px; /* Уменьшенные отступы внутри кнопки */
-    margin: 0 3px; /* Небольшой отступ между кнопками */
+    padding: 10px 5px;
+    margin: 0 3px;
     border-radius: 30px;
-    font-size: 14px; /* Уменьшенный размер шрифта */
+    font-size: 14px;
     font-weight: 500;
     white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    text-overflow: ellipsis; /* Добавляем многоточие при переполнении */
+    text-overflow: ellipsis;
     overflow: hidden;
 }
 
@@ -189,14 +183,12 @@ header {
     color: var(--accent-color) !important;
 }
 
-/* Сетка товаров - адаптивная */
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 колонки для мобильных */
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
-/* На больших экранах увеличиваем количество колонок */
 @media (min-width: 600px) {
     .products-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -211,7 +203,7 @@ header {
 
 .product-card {
     background-color: var(--card-bg);
-    border-radius: 15px; /* Более скругленные */
+    border-radius: 15px;
     overflow: hidden;
     box-shadow: var(--card-shadow);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
@@ -224,24 +216,23 @@ header {
 
 .product-image {
     width: 100%;
-    height: 160px; /* Увеличенный размер */
+    height: 160px;
     object-fit: cover;
 }
 
 .product-info {
-    padding: 15px; /* Больше отступов */
+    padding: 15px;
 }
 
-/* Исправленный стиль названия товара */
 .product-title {
-    font-size: 18px; /* Увеличенный размер шрифта */
-    font-weight: 700; /* Более жирный шрифт */
+    font-size: 18px;
+    font-weight: 700;
     margin: 0 0 6px 0;
-    color: #000000; /* Более темный цвет для лучшей контрастности */
+    color: #000000;
 }
 
 .product-price {
-    font-size: 18px; /* Увеличенный шрифт */
+    font-size: 18px;
     font-weight: 700;
     color: var(--primary-color);
     margin: 0 0 10px 0;
@@ -254,15 +245,14 @@ header {
 }
 
 .stock-info {
-    font-size: 14px; /* Увеличенный шрифт */
+    font-size: 14px;
     color: #555;
 }
 
-/* Более заметная кнопка избранного */
 .favorite-button {
     background: none;
     border: none;
-    font-size: 28px; /* Увеличенный размер */
+    font-size: 28px;
     color: #ccc;
     cursor: pointer;
     padding: 5px;
@@ -279,7 +269,6 @@ header {
     animation: favoriteAnimation 0.4s ease;
 }
 
-/* Стили модального окна - улучшены для мобильных */
 .modal {
     display: none;
     position: fixed;
@@ -298,7 +287,7 @@ header {
     right: 0;
     background-color: var(--bg-color);
     border-radius: 20px 20px 0 0;
-    padding: 25px; /* Больше отступов */
+    padding: 25px;
     max-height: 80%;
     overflow-y: auto;
     transform: translateY(100%);
@@ -317,13 +306,13 @@ header {
 }
 
 .modal-header h2 {
-    font-size: 22px; /* Увеличенный шрифт */
+    font-size: 22px;
     margin: 0;
     color: var(--text-color);
 }
 
 .close-modal {
-    font-size: 32px; /* Увеличенный значок закрытия */
+    font-size: 32px;
     cursor: pointer;
     width: 40px;
     height: 40px;
@@ -334,7 +323,7 @@ header {
 
 .favorites-list {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* 2 колонки для мобильных */
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
@@ -346,12 +335,11 @@ header {
 
 .favorites-list-empty {
     text-align: center;
-    padding: 30px; /* Больше отступов */
+    padding: 30px;
     color: #777;
     font-size: 16px;
 }
 
-/* Контейнер для анимации аниме-девочки */
 .favorite-animation-container {
     position: fixed;
     top: 0;
@@ -384,4 +372,219 @@ header {
 
 .favorite-animation-container.active .favorite-animation-image {
     animation-name: rotateAndScale, shineEffect;
+}
+
+.tabs {
+    display: flex;
+    margin-bottom: 20px;
+    border-radius: 30px;
+    background-color: #e0e0e0;
+    padding: 5px;
+    overflow: hidden;
+}
+
+.tab {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-weight: 500;
+    text-align: center;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+}
+
+.tab.active {
+    background-color: var(--primary-color);
+    color: var(--accent-color);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+.reviews-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.reviews-header h2 {
+    margin: 0;
+    font-size: 20px;
+    color: var(--primary-color);
+}
+
+.add-review-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.add-review-button:hover {
+    background-color: var(--primary-dark);
+}
+
+.add-review-button:active {
+    transform: scale(0.97);
+}
+
+.reviews-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.review-card {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    padding: 15px;
+    animation: fadeIn 0.5s ease;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-user-info {
+    flex: 1;
+}
+
+.review-username {
+    font-weight: 600;
+    margin: 0;
+}
+
+.review-date {
+    font-size: 12px;
+    color: #777;
+}
+
+.review-rating {
+    color: #FFB800;
+    font-size: 16px;
+}
+
+.review-text {
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+#review-modal .modal-content {
+    max-width: 500px;
+}
+
+.rating-selector {
+    margin-bottom: 20px;
+}
+
+.stars {
+    display: flex;
+    gap: 5px;
+    font-size: 30px;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.star {
+    transition: color 0.2s ease;
+}
+
+.star:hover, .star.active {
+    color: #FFB800;
+}
+
+.review-text textarea {
+    width: 100%;
+    height: 120px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    resize: none;
+    font-family: inherit;
+    font-size: 14px;
+    margin-top: 5px;
+    box-sizing: border-box;
+}
+
+.text-count {
+    text-align: right;
+    font-size: 12px;
+    color: #777;
+    margin-top: 5px;
+}
+
+#submit-review {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+}
+
+.empty-reviews {
+    text-align: center;
+    padding: 40px 20px;
+    color: #777;
+}
+
+.empty-reviews i {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.your-review-badge {
+    background-color: var(--primary-light);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background-color: var(--primary-color);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: transform 0.3s ease;
+    text-align: center;
+    max-width: 90%;
+}
+
+.notification.visible {
+    transform: translateX(-50%) translateY(0);
+}
+
+.notification.success {
+    background-color: #4CAF50;
+}
+
+.notification.error {
+    background-color: #f44336;
 }

@@ -1,16 +1,15 @@
-// Инициализация Telegram Mini App
 const tg = window.Telegram.WebApp;
 tg.expand();
 
-// Установка фирменных цветов
 tg.setHeaderColor('#5d7972');
 tg.setBackgroundColor('#f5f5f5');
 
-// Загрузка товаров из JSON-файла
 let products = [];
 let favorites = [];
+let reviews = [];
+let userReview = null;
+let selectedRating = 0;
 
-// Загрузка избранных товаров
 function loadFavorites() {
     return new Promise((resolve) => {
         if (tg.CloudStorage) {
@@ -27,17 +26,14 @@ function loadFavorites() {
     });
 }
 
-// Сохранение избранных товаров
 function saveFavorites() {
     if (tg.CloudStorage) {
         tg.CloudStorage.setItem('favorites', JSON.stringify(favorites));
     }
 }
 
-// Загрузка товаров из Firebase
 async function loadProducts() {
     try {
-        // Проверяем, что db доступен
         if (typeof db === 'undefined') {
             throw new Error('Firebase не инициализирован');
         }
@@ -52,14 +48,12 @@ async function loadProducts() {
             });
         });
         
-        // Загружаем избранное
         favorites = await loadFavorites();
         
         renderProducts(products);
     } catch (error) {
         console.error('Ошибка загрузки товаров:', error);
         
-        // Загрузка демо-товаров, если Firebase недоступен
         products = [
             {
                 id: 1,
@@ -74,7 +68,29 @@ async function loadProducts() {
     }
 }
 
-// Отображение товаров
+async function loadReviews() {
+    try {
+        const snapshot = await db.collection('reviews').orderBy('date', 'desc').get();
+        reviews = [];
+        
+        snapshot.forEach(doc => {
+            reviews.push({
+                id: doc.id,
+                ...doc.data()
+            });
+        });
+        
+        const userId = tg.initDataUnsafe?.user?.id;
+        if (userId) {
+            userReview = reviews.find(review => review.userId === userId.toString());
+        }
+        
+        renderReviews();
+    } catch (error) {
+        console.error('Ошибка загрузки отзывов:', error);
+    }
+}
+
 function renderProducts(productsToRender) {
     const productsContainer = document.getElementById('products');
     productsContainer.innerHTML = '';
@@ -103,7 +119,6 @@ function renderProducts(productsToRender) {
         productsContainer.appendChild(productElement);
     });
     
-    // Добавляем обработчики событий для кнопок избранного
     document.querySelectorAll('.favorite-button').forEach(button => {
         button.addEventListener('click', function() {
             const productId = parseInt(this.getAttribute('data-id'));
@@ -112,43 +127,92 @@ function renderProducts(productsToRender) {
     });
 }
 
-// Функция для запуска анимации с аниме-девочкой
+function renderReviews() {
+    const reviewsList = document.getElementById('reviews-list');
+    const addReviewButton = document.getElementById('add-review-button');
+    
+    reviewsList.innerHTML = '';
+    
+    if (reviews.length === 0) {
+        reviewsList.innerHTML = `
+            <div class="empty-reviews">
+                <i class="fas fa-comments"></i>
+                <p>Отзывов пока нет. Будьте первым, кто оставит отзыв!</p>
+            </div>
+        `;
+    } else {
+        reviews.forEach(review => {
+            const isUserReview = review.userId === tg.initDataUnsafe?.user?.id?.toString();
+            const reviewElement = document.createElement('div');
+            reviewElement.className = 'review-card';
+            
+            const date = new Date(review.date.seconds * 1000);
+            const formattedDate = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()}`;
+            
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= review.rating) {
+                    stars += '★';
+                } else {
+                    stars += '☆';
+                }
+            }
+            
+            reviewElement.innerHTML = `
+                <div class="review-header">
+                    <div class="review-user-info">
+                        <h4 class="review-username">
+                            ${review.userName}
+                            ${isUserReview ? '<span class="your-review-badge">Ваш отзыв</span>' : ''}
+                        </h4>
+                        <div class="review-date">${formattedDate}</div>
+                    </div>
+                    <div class="review-rating">${stars}</div>
+                </div>
+                <div class="review-text">
+                    ${review.text}
+                </div>
+            `;
+            
+            reviewsList.appendChild(reviewElement);
+        });
+    }
+    
+    if (userReview) {
+        addReviewButton.textContent = 'Изменить отзыв';
+    } else {
+        addReviewButton.textContent = 'Оставить отзыв';
+    }
+}
+
 function playFavoriteAnimation() {
     const animationContainer = document.getElementById('favorite-animation');
     const animationImage = animationContainer.querySelector('.favorite-animation-image');
     
-    // Сбрасываем анимацию, если она уже запущена
     animationContainer.classList.remove('active');
-    void animationContainer.offsetWidth; // Перезапуск анимации
+    void animationContainer.offsetWidth;
     
-    // Запускаем анимацию
     animationContainer.classList.add('active');
     
-    // Удаляем класс после завершения анимации
     setTimeout(() => {
         animationContainer.classList.remove('active');
-    }, 1500); // Длительность анимации
+    }, 1500);
 }
 
-// Переключение избранного
 function toggleFavorite(productId, button) {
     const index = favorites.indexOf(productId);
     
     if (index === -1) {
-        // Добавляем в избранное
         favorites.push(productId);
         button.classList.add('active');
         button.textContent = '♥';
         
-        // Воспроизводим анимацию с аниме-девочкой
         playFavoriteAnimation();
         
-        // Вибрация (работает в Telegram)
         if (tg.HapticFeedback) {
             tg.HapticFeedback.impactOccurred('light');
         }
     } else {
-        // Удаляем из избранного
         favorites.splice(index, 1);
         button.classList.remove('active');
         button.textContent = '♡';
@@ -157,7 +221,6 @@ function toggleFavorite(productId, button) {
     saveFavorites();
 }
 
-// Фильтрация товаров по категории
 function filterProducts(category) {
     if (category === 'all') {
         renderProducts(products);
@@ -167,7 +230,6 @@ function filterProducts(category) {
     }
 }
 
-// Поиск товаров
 function searchProducts(query) {
     if (!query.trim()) {
         renderProducts(products);
@@ -182,7 +244,6 @@ function searchProducts(query) {
     renderProducts(filtered);
 }
 
-// Показ окна избранного
 function showFavorites() {
     const modal = document.getElementById('favorites-modal');
     const modalContent = modal.querySelector('.modal-content');
@@ -214,17 +275,14 @@ function showFavorites() {
             favoritesList.appendChild(productElement);
         });
         
-        // Добавляем обработчики для кнопок избранного
         favoritesList.querySelectorAll('.favorite-button').forEach(button => {
             button.addEventListener('click', function() {
                 const productId = parseInt(this.getAttribute('data-id'));
                 toggleFavorite(productId, this);
                 
-                // Удаляем карточку товара из списка избранного
                 setTimeout(() => {
                     this.closest('.product-card').remove();
                     
-                    // Обновляем сообщение, если список пуст
                     if (favorites.length === 0) {
                         favoritesList.innerHTML = '<div class="favorites-list-empty">У вас пока нет избранных товаров</div>';
                     }
@@ -239,39 +297,153 @@ function showFavorites() {
     }, 10);
 }
 
-// Обработчики событий
-document.addEventListener('DOMContentLoaded', function() {
-    // Загрузка товаров
-    loadProducts();
+function showReviewForm() {
+    const modal = document.getElementById('review-modal');
+    const reviewText = document.getElementById('review-text');
+    const stars = document.querySelectorAll('.star');
     
-    // Обработчики для категорий
+    selectedRating = 0;
+    stars.forEach(star => star.classList.remove('active'));
+    
+    if (userReview) {
+        reviewText.value = userReview.text;
+        selectedRating = userReview.rating;
+        
+        stars.forEach(star => {
+            if (parseInt(star.getAttribute('data-rating')) <= selectedRating) {
+                star.classList.add('active');
+            }
+        });
+    } else {
+        reviewText.value = '';
+    }
+    
+    document.getElementById('char-count').textContent = reviewText.value.length;
+    
+    modal.style.display = 'block';
+    setTimeout(() => {
+        modal.classList.add('active');
+    }, 10);
+}
+
+async function submitReview() {
+    if (!tg.initDataUnsafe?.user) {
+        showNotification('Необходимо авторизоваться через Telegram', 'error');
+        return;
+    }
+    
+    const user = tg.initDataUnsafe.user;
+    const userId = user.id.toString();
+    const userName = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+    const reviewText = document.getElementById('review-text').value.trim();
+    
+    if (selectedRating === 0) {
+        showNotification('Пожалуйста, выберите оценку', 'error');
+        return;
+    }
+    
+    if (reviewText.length < 5) {
+        showNotification('Пожалуйста, напишите отзыв (минимум 5 символов)', 'error');
+        return;
+    }
+    
+    try {
+        const reviewData = {
+            userId: userId,
+            userName: userName,
+            rating: selectedRating,
+            text: reviewText,
+            date: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        
+        if (userReview) {
+            await db.collection('reviews').doc(userReview.id).update(reviewData);
+            showNotification('Ваш отзыв обновлен', 'success');
+        } else {
+            await db.collection('reviews').doc(userId).set(reviewData);
+            showNotification('Спасибо за ваш отзыв!', 'success');
+            
+            if (tg.HapticFeedback) {
+                tg.HapticFeedback.impactOccurred('medium');
+            }
+        }
+        
+        const modal = document.getElementById('review-modal');
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+        
+        await loadReviews();
+        
+    } catch (error) {
+        console.error('Ошибка при отправке отзыва:', error);
+        showNotification('Ошибка при отправке отзыва', 'error');
+    }
+}
+
+function showNotification(message, type = '') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.classList.add('visible');
+    }, 10);
+    
+    setTimeout(() => {
+        notification.classList.remove('visible');
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }, 3000);
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadProducts();
+    loadReviews();
+    
     document.querySelectorAll('.category').forEach(button => {
         button.addEventListener('click', function() {
-            // Удаляем активный класс у всех кнопок
             document.querySelectorAll('.category').forEach(btn => {
                 btn.classList.remove('active');
             });
             
-            // Добавляем активный класс нажатой кнопке
             this.classList.add('active');
             
-            // Фильтруем товары по выбранной категории
             const category = this.getAttribute('data-category');
             filterProducts(category);
         });
     });
     
-    // Обработчик для поиска
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            document.querySelectorAll('.tab').forEach(t => {
+                t.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            this.classList.add('active');
+            
+            const tabName = this.getAttribute('data-tab');
+            document.getElementById(`${tabName}-content`).classList.add('active');
+        });
+    });
+    
     const searchInput = document.getElementById('search-input');
     searchInput.addEventListener('input', function() {
         searchProducts(this.value);
     });
     
-    // Обработчик для кнопки избранного
     document.getElementById('favorites-button').addEventListener('click', showFavorites);
+    document.getElementById('add-review-button').addEventListener('click', showReviewForm);
     
-    // Закрытие модального окна
-    document.querySelector('.close-modal').addEventListener('click', function() {
+    document.querySelector('#favorites-modal .close-modal').addEventListener('click', function() {
         const modal = document.getElementById('favorites-modal');
         modal.classList.remove('active');
         setTimeout(() => {
@@ -279,7 +451,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 300);
     });
     
-    // Закрытие модального окна при клике вне его содержимого
+    document.querySelector('#review-modal .close-modal').addEventListener('click', function() {
+        const modal = document.getElementById('review-modal');
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+    });
+    
     document.getElementById('favorites-modal').addEventListener('click', function(event) {
         if (event.target === this) {
             this.classList.remove('active');
@@ -288,4 +467,36 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 300);
         }
     });
+    
+    document.getElementById('review-modal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            this.classList.remove('active');
+            setTimeout(() => {
+                this.style.display = 'none';
+            }, 300);
+        }
+    });
+    
+    document.querySelectorAll('.star').forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = parseInt(this.getAttribute('data-rating'));
+            selectedRating = rating;
+            
+            document.querySelectorAll('.star').forEach(s => {
+                s.classList.remove('active');
+            });
+            
+            document.querySelectorAll('.star').forEach(s => {
+                if (parseInt(s.getAttribute('data-rating')) <= rating) {
+                    s.classList.add('active');
+                }
+            });
+        });
+    });
+    
+    document.getElementById('review-text').addEventListener('input', function() {
+        document.getElementById('char-count').textContent = this.value.length;
+    });
+    
+    document.getElementById('submit-review').addEventListener('click', submitReview);
 });
