@@ -14,14 +14,27 @@
 }
 
 @keyframes favoriteAnimation {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.3);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes rotateAndScale {
@@ -29,35 +42,45 @@
         transform: rotate(0deg) scale(0);
         opacity: 0;
     }
+
     10% {
         transform: rotate(36deg) scale(0.3);
         opacity: 1;
     }
+
     20% {
         transform: rotate(72deg) scale(0.5);
     }
+
     30% {
         transform: rotate(108deg) scale(0.7);
     }
+
     40% {
         transform: rotate(144deg) scale(0.9);
     }
+
     50% {
         transform: rotate(180deg) scale(1);
     }
+
     60% {
         transform: rotate(216deg) scale(0.9);
     }
+
     70% {
         transform: rotate(252deg) scale(0.7);
     }
+
     80% {
         transform: rotate(288deg) scale(0.5);
     }
+
     90% {
         transform: rotate(324deg) scale(0.3);
         opacity: 1;
     }
+
     100% {
         transform: rotate(360deg) scale(0);
         opacity: 0;
@@ -68,9 +91,11 @@
     0% {
         filter: drop-shadow(0 0 0 rgba(255, 100, 255, 0));
     }
+
     50% {
         filter: drop-shadow(0 0 15px rgba(255, 100, 255, 0.8));
     }
+
     100% {
         filter: drop-shadow(0 0 0 rgba(255, 100, 255, 0));
     }
@@ -108,7 +133,15 @@ header {
     height: 40px;
 }
 
-.favorites-button {
+/* Новые стили для кнопок в шапке */
+.header-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.favorites-button,
+.menu-button,
+.reviews-button {
     width: 50px;
     height: 50px;
     display: flex;
@@ -119,15 +152,22 @@ header {
     border-radius: 50%;
     cursor: pointer;
     transition: transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.favorites-button:active {
+.favorites-button:active,
+.menu-button:active,
+.reviews-button:active {
     transform: scale(0.95);
 }
 
 .favorites-icon {
     font-size: 28px;
+}
+
+.menu-icon,
+.reviews-icon {
+    font-size: 24px;
 }
 
 .search-box {
@@ -144,7 +184,7 @@ header {
     background-color: #e0e0e0;
     color: var(--text-color);
     font-size: 16px;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
 }
 
@@ -153,7 +193,7 @@ header {
     justify-content: space-between;
     margin-bottom: 20px;
     padding: 10px 0;
-    overflow-x: hidden;
+    overflow-x: auto;
 }
 
 .category {
@@ -169,7 +209,7 @@ header {
     white-space: nowrap;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -374,41 +414,6 @@ header {
     animation-name: rotateAndScale, shineEffect;
 }
 
-.tabs {
-    display: flex;
-    margin-bottom: 20px;
-    border-radius: 30px;
-    background-color: #e0e0e0;
-    padding: 5px;
-    overflow: hidden;
-}
-
-.tab {
-    flex: 1;
-    padding: 10px 15px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    font-weight: 500;
-    text-align: center;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-}
-
-.tab.active {
-    background-color: var(--primary-color);
-    color: var(--accent-color);
-}
-
-.tab-content {
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-    animation: fadeIn 0.5s ease;
-}
-
 .reviews-header {
     display: flex;
     justify-content: space-between;
@@ -430,7 +435,7 @@ header {
     border-radius: 30px;
     cursor: pointer;
     font-weight: 500;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease, transform 0.2s ease;
     display: flex;
     align-items: center;
@@ -489,10 +494,6 @@ header {
     line-height: 1.5;
 }
 
-#review-modal .modal-content {
-    max-width: 500px;
-}
-
 .rating-selector {
     margin-bottom: 20px;
 }
@@ -509,7 +510,8 @@ header {
     transition: color 0.2s ease;
 }
 
-.star:hover, .star.active {
+.star:hover,
+.star.active {
     color: #FFB800;
 }
 
@@ -570,7 +572,7 @@ header {
     color: white;
     padding: 12px 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     transition: transform 0.3s ease;
     text-align: center;
@@ -587,4 +589,147 @@ header {
 
 .notification.error {
     background-color: #f44336;
+}
+
+/* Стили для меню */
+.menu-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.menu-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.menu-option:hover {
+    background-color: #ebebeb;
+}
+
+.menu-option:active {
+    background-color: #e0e0e0;
+}
+
+.menu-option i {
+    font-size: 24px;
+    color: var(--primary-color);
+}
+
+.menu-option span {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* Стили для контактов */
+.contacts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 10px 0;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 12px;
+}
+
+.contact-item i {
+    font-size: 24px;
+    color: #0088cc;
+}
+
+.contact-item a {
+    font-size: 16px;
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+/* Стили для локации */
+.location-info {
+    text-align: center;
+}
+
+.location-info p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.location-map {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.map-preview {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.map-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.map-overlay i {
+    font-size: 24px;
+    margin-bottom: 8px;
+}
+
+.map-link {
+    display: block;
+    width: 100%;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.map-link:hover .map-overlay {
+    opacity: 1;
+}
+
+/* Адаптивные стили для маленьких экранов */
+@media (max-width: 400px) {
+    .header-buttons {
+        gap: 8px;
+    }
+
+    .favorites-button,
+    .menu-button,
+    .reviews-button {
+        width: 45px;
+        height: 45px;
+    }
+
+    .categories {
+        padding: 5px 0;
+    }
+
+    .category {
+        padding: 8px 5px;
+        font-size: 13px;
+    }
 }

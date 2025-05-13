@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Par Dar Shop</title>
     <meta charset="UTF-8">
@@ -9,54 +10,48 @@
     <link rel="stylesheet" href="styles.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="firebase-config.js"></script>
 </head>
+
 <body>
     <div class="container">
         <header>
             <div class="logo">
                 <img src="images/logo.svg" alt="Par Dar Shop" class="logo-image">
             </div>
-            <div class="favorites-button" id="favorites-button">
-                <span class="favorites-icon">♥</span>
+            <div class="header-buttons">
+                <div class="menu-button" id="menu-button">
+                    <span class="menu-icon"><i class="fas fa-bars"></i></span>
+                </div>
+                <div class="reviews-button" id="reviews-button">
+                    <span class="reviews-icon"><i class="fas fa-comments"></i></span>
+                </div>
+                <div class="favorites-button" id="favorites-button">
+                    <span class="favorites-icon">♥</span>
+                </div>
             </div>
         </header>
-        
+
         <div class="search-box">
             <input type="text" id="search-input" placeholder="Поиск...">
         </div>
-        
+
         <div class="categories">
             <button class="category active" data-category="all">Все</button>
             <button class="category" data-category="pods">Поды</button>
             <button class="category" data-category="disposable">Одноразки</button>
             <button class="category" data-category="liquid">Жидкости</button>
+            <button class="category" data-category="other">Другое</button>
         </div>
-        
-        <div class="tabs">
-            <button class="tab active" data-tab="products">Товары</button>
-            <button class="tab" data-tab="reviews">Отзывы</button>
-        </div>
-        
-        <div id="content">
-            <div id="products-content" class="tab-content active">
-                <div id="products" class="products-grid"></div>
-            </div>
-            
-            <div id="reviews-content" class="tab-content">
-                <div class="reviews-header">
-                    <h2>Отзывы о магазине</h2>
-                    <button id="add-review-button" class="add-review-button">Оставить отзыв</button>
-                </div>
-                
-                <div id="reviews-list" class="reviews-list"></div>
-            </div>
-        </div>
+
+        <div id="products" class="products-grid"></div>
     </div>
-    
+
+    <!-- Модальное окно избранного -->
     <div id="favorites-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -66,8 +61,23 @@
             <div id="favorites-list" class="favorites-list"></div>
         </div>
     </div>
-    
-    <div id="review-modal" class="modal">
+
+    <!-- Модальное окно отзывов -->
+    <div id="reviews-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Отзывы о магазине</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="reviews-header">
+                <button id="add-review-button" class="add-review-button">Оставить отзыв</button>
+            </div>
+            <div id="reviews-list" class="reviews-list"></div>
+        </div>
+    </div>
+
+    <!-- Модальное окно формы отзыва -->
+    <div id="review-form-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Оставить отзыв</h2>
@@ -86,18 +96,83 @@
                 </div>
                 <div class="review-text">
                     <p>Ваш отзыв:</p>
-                    <textarea id="review-text" maxlength="500" placeholder="Поделитесь вашими впечатлениями о магазине..."></textarea>
+                    <textarea id="review-text" maxlength="500"
+                        placeholder="Поделитесь вашими впечатлениями о магазине..."></textarea>
                     <div class="text-count"><span id="char-count">0</span>/500</div>
                 </div>
                 <button id="submit-review" class="primary-button">Отправить</button>
             </div>
         </div>
     </div>
-    
+
+    <!-- Модальное окно меню -->
+    <div id="menu-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Меню</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="menu-options">
+                <div class="menu-option" id="contacts-option">
+                    <i class="fas fa-address-book"></i>
+                    <span>Контакты</span>
+                </div>
+                <div class="menu-option" id="location-option">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Адрес магазина</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно контактов -->
+    <div id="contacts-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Контакты</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="contacts-list">
+                <div class="contact-item">
+                    <i class="fab fa-telegram"></i>
+                    <a href="https://t.me/artem_temma" target="_blank">@artem_temma</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-telegram"></i>
+                    <a href="https://t.me/dmf204" target="_blank">@dmf204</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальное окно локации -->
+    <div id="location-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Адрес магазина</h2>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="location-info">
+                <p>ул. Сущёвский Вал, 5с6, Москва</p>
+                <div class="location-map">
+                    <a href="https://yandex.ru/maps/213/moscow/house/ulitsa_sushchyovskiy_val_5s6/Z04Ycw5hTUYGQFtvfXt4dXRkZg==/?indoorLevel=1&ll=37.591431%2C55.794872&z=17"
+                        target="_blank" class="map-link">
+                        <img src="images/map-preview.jpg" alt="Карта" class="map-preview">
+                        <div class="map-overlay">
+                            <i class="fas fa-external-link-alt"></i>
+                            <span>Открыть в Яндекс.Картах</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="favorite-animation" class="favorite-animation-container">
         <img src="images/anime-girl.png" alt="Favorite" class="favorite-animation-image">
     </div>
-    
+
     <script src="app.js"></script>
 </body>
+
 </html>
